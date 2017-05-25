@@ -34,7 +34,7 @@ public class PhotoSaver {
         filename = rigthNow.get(Calendar.DAY_OF_MONTH)+"_"+rigthNow.get(Calendar.MONTH)+"_"+rigthNow.get(Calendar.YEAR)+".jpeg";
     }
 
-    public void record(){
+    public String record(){
         if(Environment.getExternalStorageState() != null){
             try{
                 image = mediaPlayer.getCurrentFrame();
@@ -42,14 +42,20 @@ public class PhotoSaver {
                 FileOutputStream fos = new FileOutputStream(picture);
                 image.compress(Bitmap.CompressFormat.JPEG, 100, fos);
                 fos.close();
+                //Aggiungere qui salvataggio info immagine nel db
+
                 Toast.makeText(context, "Picture saved in: " + imgName, Toast.LENGTH_LONG).show();
+                return imgName;
             }catch (FileNotFoundException e){
                 Toast.makeText(context, "Picture file creation failed", Toast.LENGTH_LONG).show();
+                return null;
             }catch (IOException e){
                 Toast.makeText(context, "Unable to create picture file", Toast.LENGTH_LONG).show();
+                return null;
             }
         }else{
             Toast.makeText(context, "Internal memory not avaible", Toast.LENGTH_LONG).show();
+            return null;
         }
     }
 
