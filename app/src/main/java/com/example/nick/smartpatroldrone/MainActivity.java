@@ -25,8 +25,8 @@ import java.util.Calendar;
 
 import io.vov.vitamio.LibsChecker;
 
-import static com.example.nick.smartpatroldrone.Interface.ServerInterface.DOWNLOAD;
-import static com.example.nick.smartpatroldrone.Interface.ServerInterface.UPLOAD;
+import static com.example.nick.smartpatroldrone.Interface.ServerInterface.TRAINING;
+import static com.example.nick.smartpatroldrone.Interface.ServerInterface.RECOGNITION;
 
 public class MainActivity extends AppCompatActivity {
     private Button btnTake, btnDownload, btnUpload, btnConnetti, btnDrone;
@@ -155,13 +155,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (mIsBound && mBoundService != null) {
-                    try {
-                        SocketWorker socketWorker =
-                                new SocketWorker(MainActivity.this,mBoundService,progress,DOWNLOAD);
-                        socketWorker.execute();
+                    if (imgByte != null) {
+                        try {
+                            SocketWorker socketWorker =
+                                    new SocketWorker(MainActivity.this,mBoundService,bitmapName,imgByte,progress,RECOGNITION);
+                            socketWorker.execute();
 
-                    } catch (Exception e) {
-                        mBoundService.displayToast(e.getMessage());
+                        } catch (Exception e) {
+                            mBoundService.displayToast(e.getMessage());
+                        }
                     }
                 }
                 else
@@ -174,10 +176,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (mIsBound && mBoundService != null) {
                     if (imgByte != null) {
-                        SocketWorker socketWorker =
-                                new SocketWorker(MainActivity.this,mBoundService,bitmapName,imgByte,progress,UPLOAD);
-                        socketWorker.execute();
-
+                        try {
+                            SocketWorker socketWorker =
+                                    new SocketWorker(MainActivity.this,mBoundService,bitmapName,imgByte,progress,TRAINING);
+                            socketWorker.execute();
+                        } catch (Exception e) {
+                            mBoundService.displayToast(e.getMessage());
+                        }
                     }
                 }
                 else
